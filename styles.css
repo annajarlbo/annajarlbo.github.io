@@ -1,0 +1,42 @@
+body {
+    background-color: #ebe3e3;
+}
+
+.container {
+    padding-top: 1.9rem;
+}
+
+h1 {
+    font-weight: 300;
+}
+
+.justify p {
+    text-align: justify;
+}
+
+.roskilde2022 .column {
+    padding-left: 0rem;
+    padding-right: 0rem;
+}
+
+.roskilde2022 .column img {
+    padding: 0.03rem;
+}
+
+.rf2022-link {
+    margin-top: 40px;
+}
+
+div.rfshop {
+    padding: 0;
+}
+
+#profile img {
+    border-radius: 75px;
+    box-shadow: 7px 7px rgba(3, 0, 62, 0.15);
+    transition: all .6s ease;
+}
+
+#profile img:hover {
+    box-shadow: 3px 3px rgba(3, 0, 62, 0.35);
+}

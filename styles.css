@@ -1,3 +1,8 @@
+@font-face {
+    font-family: kaoly;
+    src: url(fonts/kaoly/Kaoly\ Demo-Regular.ttf);
+}
+
 body {
     background-color: #ebe3e3;
 }

@@ -1,3 +1,8 @@
+@font-face {
+    font-family: kaoly;
+    src: url(fonts/kaoly/Kaoly\ Demo-Regular.ttf);
+}
+
 body {
     background-color: #ebe3e3;
 }
@@ -7,20 +12,28 @@ body {
 }
 
 h1 {
-    font-weight: 300;
+    font-weight: 100;
 }
 
-.resume p {
+.justify p {
     text-align: justify;
 }
 
-.roskilde2023 .column {
+.roskilde .column {
     padding-left: 0rem;
     padding-right: 0rem;
 }
 
-.roskilde2023 .column img {
+.roskilde .column img {
     padding: 0.03rem;
+}
+
+.rf2022-link {
+    margin-top: 40px;
+}
+
+div.rfshop {
+    padding: 0;
 }
 
 #profile img {
@@ -31,4 +44,8 @@ h1 {
 
 #profile img:hover {
     box-shadow: 3px 3px rgba(3, 0, 62, 0.35);
+}
+
+div.withlove {
+    padding-top: 200px;
 }

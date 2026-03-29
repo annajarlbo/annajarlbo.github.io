@@ -332,11 +332,6 @@ a.stretched {
     margin: 0 auto
 }
 
-p {
-    text-align: center;
-    margin: 1.5em !important
-}
-
 .footer-black {
     height: 9em;
     margin-top: 2em;
@@ -465,11 +460,6 @@ p {
 .page-description {
     font-size: 1.5em;
     font-style: italic;
-    padding: .5em
-}
-
-p {
-    margin: 0;
     padding: .5em
 }
 
@@ -668,11 +658,12 @@ iframe {
 }
 
 body {
-    background-color: #ebe3e3
+    background-color: #fff
 }
 
 p {
-    font-family: Roboto
+    font-family: Roboto;
+    text-align: center;
 }
 
 h1.page-title {

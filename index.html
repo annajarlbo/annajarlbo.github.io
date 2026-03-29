@@ -1,115 +1,61 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
-
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Slideshow</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      background: #fff;
+    }
 
-  <title>Anna Jarlbo, fashion interpreter</title>
-  <meta name="description" content="">
-  
-  
-  <link rel="icon" type="image/x-icon" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;images&#x2F;favicon_package_v0.16&#x2F;favicon.ico">
-  
+    .slideshow-container {
+      display: flex;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      width: 100vw;
+      height: 100vh;
+      align-items: center;
+    }
 
-  <link rel="stylesheet" href="https://designer.annajarlbo.dk/main.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nanogallery2@3.0.5/dist/css/nanogallery2.min.css" />
+    .slide {
+      flex: 0 0 auto;
+      width: 80vw;
+      height: 80vh;
+      margin: 0 2vw;
+      scroll-snap-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .slide img {
+      max-width: 100%;
+      max-height: 100%;
+      border-radius: 1.5rem;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    }
+  </style>
 </head>
 
-
 <body>
-  <div id="index-header">
-    <h1 class="top-title">
-      <a href="https:&#x2F;&#x2F;designer.annajarlbo.dk" class="index-top-title">Anna Jarlbo, fashion interpreter</a>
-    </h1>
-    <span class="header-link-container">
-      
-    </span>
+  <div class="slideshow-container">
+    <div class="slide"><img src="images/profile_flowers.jpg" alt="Profile Flowers"></div>
+    <div class="slide"><img src="images/becksondergaard/BS_IMG_6035.jpeg" alt="Becksondergaard 1"></div>
+    <div class="slide"><img src="images/becksondergaard/BS_IMG_6210.jpeg" alt="Becksondergaard 2"></div>
+    <div class="slide"><img src="images/becksondergaard/BS_IMG_6399.jpeg" alt="Becksondergaard 3"></div>
+    <div class="slide"><img src="images/becksondergaard/BS_IMG_7599.jpeg" alt="Becksondergaard 4"></div>
+    <div class="slide"><img src="images/becksondergaard/BS_IMG_7869.jpeg" alt="Becksondergaard 5"></div>
+    <div class="slide"><img src="images/rfshop2022/OZ0A1456.jpg" alt="RF Shop 1"></div>
+    <div class="slide"><img src="images/rfshop2022/OZ0A1604.jpg" alt="RF Shop 2"></div>
+    <div class="slide"><img src="images/rfshop2022/OZ0A1749.jpg" alt="RF Shop 3"></div>
+    <div class="slide"><img src="images/rfshop2022/OZ0A1797.jpg" alt="RF Shop 4"></div>
+    <div class="slide"><img src="images/rfshop2022/OZ0A1911.jpg" alt="RF Shop 5"></div>
   </div>
-  <div class="content">
-    
-  </div>
-  <div class="content">
-    
-    <div class="posts">
-      
-      <a class="stretched" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;rf24&#x2F;">
-        <div class="post-container">
-          <img data-src="&#x2F;images&#x2F;roskilde2024&#x2F;20240612_Roskilde4596 1.jpg" class="lozad" data-placeholder-background="darkgrey">
-          <div class="post-text">
-            <h2 class="post-title">Roskilde Collection 24</h2>
-            <span class="post-description"></span>
-            <!-- <span class="post-date">2024&#x2F;07&#x2F;01</span>     -->
-          </div>
-        </div>
-      </a>
-      
-      <a class="stretched" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;rf22&#x2F;">
-        <div class="post-container">
-          <img data-src="&#x2F;images&#x2F;roskilde2022&#x2F;billede1.jpg" class="lozad" data-placeholder-background="darkgrey">
-          <div class="post-text">
-            <h2 class="post-title">Roskilde Collection 22</h2>
-            <span class="post-description"></span>
-            <!-- <span class="post-date">2022&#x2F;07&#x2F;01</span>     -->
-          </div>
-        </div>
-      </a>
-      
-      <a class="stretched" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;rf19&#x2F;">
-        <div class="post-container">
-          <img data-src="&#x2F;images&#x2F;roskilde2019&#x2F;roskilde-merch2019-7-759x397.jpg" class="lozad" data-placeholder-background="darkgrey">
-          <div class="post-text">
-            <h2 class="post-title">Roskilde Collection 19</h2>
-            <span class="post-description"></span>
-            <!-- <span class="post-date">2019&#x2F;07&#x2F;01</span>     -->
-          </div>
-        </div>
-      </a>
-      
-      <a class="stretched" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;rf18&#x2F;">
-        <div class="post-container">
-          <img data-src="&#x2F;images&#x2F;roskilde2018&#x2F;A.jpg" class="lozad" data-placeholder-background="darkgrey">
-          <div class="post-text">
-            <h2 class="post-title">Roskilde Collection 18</h2>
-            <span class="post-description"></span>
-            <!-- <span class="post-date">2018&#x2F;07&#x2F;01</span>     -->
-          </div>
-        </div>
-      </a>
-      
-      <a class="stretched" href="https:&#x2F;&#x2F;designer.annajarlbo.dk&#x2F;becksondergaard&#x2F;">
-        <div class="post-container">
-          <img data-src="&#x2F;images&#x2F;becksondergaard&#x2F;BS_IMG_6210.jpeg" class="lozad" data-placeholder-background="darkgrey">
-          <div class="post-text">
-            <h2 class="post-title">Becksöndergaard</h2>
-            <span class="post-description"></span>
-            <!-- <span class="post-date">2017&#x2F;07&#x2F;01</span>     -->
-          </div>
-        </div>
-      </a>
-      
-    </div>
-    
-  </div>
-  
-<script type="text/javascript" src="https://designer.annajarlbo.dk/js/galaxy.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lozad/dist/lozad.min.js"></script>
-<script>
-  const observer = lozad();
-  observer.observe();
-</script>
-<footer>
-  <div class="footer-black">
-    <div class="text-block">
-      
-      
-      
-    </div>
-  </div>
-</footer>
-
 </body>
 
 </html>

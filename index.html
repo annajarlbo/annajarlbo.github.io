@@ -1,61 +1,637 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Slideshow</title>
-  <link rel="stylesheet" href="styles.css">
+  <title>Anna Jarlbo</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/favicon_package_v0.16/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="assets/favicon_package_v0.16/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/favicon_package_v0.16/favicon-16x16.png">
   <style>
-    body {
+    @font-face {
+      font-family: 'Kaoly';
+      src: url('assets/fonts/kaoly/Kaoly-Regular.woff2') format('woff2'),
+        url('assets/fonts/kaoly/Kaoly-Regular.woff') format('woff');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #0a0a0a;
+      color: #fff;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header / Navigation */
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+    }
+
+    .logo {
+      font-family: 'Kaoly', 'Georgia', serif;
+      font-size: 2.5rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #fff;
+      text-decoration: none;
+      transition: text-shadow 0.3s ease;
+    }
+
+    .logo:hover {
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    nav {
+      display: flex;
+      gap: 30px;
+    }
+
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-size: 0.85rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 1px;
       background: #fff;
+      transition: width 0.3s ease;
     }
 
-    .slideshow-container {
-      display: flex;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      width: 100vw;
-      height: 100vh;
-      align-items: center;
+    nav a:hover::after {
+      width: 100%;
     }
 
-    .slide {
-      flex: 0 0 auto;
-      width: 80vw;
-      height: 80vh;
-      margin: 0 2vw;
-      scroll-snap-align: center;
-      display: flex;
-      align-items: center;
+    /* Mobile menu toggle */
+    .menu-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .menu-toggle span {
+      width: 25px;
+      height: 2px;
+      background: #fff;
+      transition: all 0.3s ease;
+    }
+
+    /* Gallery */
+    .gallery {
+      padding: 120px 20px 40px;
+      columns: 4 300px;
+      column-gap: 15px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .gallery-item {
+      break-inside: avoid;
+      margin-bottom: 15px;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .gallery-item img {
+      width: 100%;
+      display: block;
+      transition: transform 0.5s ease, filter 0.5s ease;
+      filter: grayscale(0%);
+    }
+
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: grayscale(0%) brightness(1.1);
+    }
+
+    .gallery-item::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.3) 100%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .gallery-item:hover::before {
+      opacity: 1;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
       justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      cursor: zoom-out;
     }
 
-    .slide img {
-      max-width: 100%;
-      max-height: 100%;
-      border-radius: 1.5rem;
-      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    .lightbox.active {
+      display: flex;
+    }
+
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      object-fit: contain;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 30px;
+      right: 30px;
+      color: #fff;
+      font-size: 2rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .lightbox-close:hover {
+      transform: rotate(90deg);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #fff;
+      font-size: 3rem;
+      cursor: pointer;
+      padding: 20px;
+      transition: opacity 0.3s ease;
+      user-select: none;
+    }
+
+    .lightbox-nav:hover {
+      opacity: 0.7;
+    }
+
+    .lightbox-prev {
+      left: 20px;
+    }
+
+    .lightbox-next {
+      right: 20px;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      font-size: 0.75rem;
+      letter-spacing: 0.1em;
+      color: #666;
+      border-top: 1px solid #222;
+    }
+
+    footer a {
+      color: #888;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    footer a:hover {
+      color: #fff;
+    }
+
+    /* Social Icons */
+    .social-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    .social-links a {
+      color: #fff;
+      font-size: 1.2rem;
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+
+    .social-links a:hover {
+      transform: translateY(-3px);
+      opacity: 0.7;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      header {
+        padding: 15px 20px;
+      }
+
+      .logo {
+        font-size: 1.8rem;
+      }
+
+      .menu-toggle {
+        display: flex;
+      }
+
+      nav {
+        position: fixed;
+        top: 0;
+        right: -100%;
+        width: 100%;
+        height: 100vh;
+        background: #0a0a0a;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        gap: 40px;
+        transition: right 0.3s ease;
+      }
+
+      nav.active {
+        right: 0;
+      }
+
+      nav a {
+        font-size: 1.2rem;
+      }
+
+      .gallery {
+        columns: 2 150px;
+        padding: 100px 10px 30px;
+        column-gap: 10px;
+      }
+
+      .gallery-item {
+        margin-bottom: 10px;
+      }
+
+      .social-links {
+        display: none;
+      }
+    }
+
+    /* Loading animation */
+    .gallery-item {
+      animation: fadeInUp 0.6s ease forwards;
+      opacity: 0;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Staggered animation delays */
+    .gallery-item:nth-child(1) {
+      animation-delay: 0.1s;
+    }
+
+    .gallery-item:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .gallery-item:nth-child(3) {
+      animation-delay: 0.2s;
+    }
+
+    .gallery-item:nth-child(4) {
+      animation-delay: 0.25s;
+    }
+
+    .gallery-item:nth-child(5) {
+      animation-delay: 0.3s;
+    }
+
+    .gallery-item:nth-child(6) {
+      animation-delay: 0.35s;
+    }
+
+    .gallery-item:nth-child(7) {
+      animation-delay: 0.4s;
+    }
+
+    .gallery-item:nth-child(8) {
+      animation-delay: 0.45s;
+    }
+
+    .gallery-item:nth-child(9) {
+      animation-delay: 0.5s;
+    }
+
+    .gallery-item:nth-child(10) {
+      animation-delay: 0.55s;
+    }
+
+    .gallery-item:nth-child(n+11) {
+      animation-delay: 0.6s;
     }
   </style>
 </head>
 
 <body>
-  <div class="slideshow-container">
-    <div class="slide"><img src="images/profile_flowers.jpg" alt="Profile Flowers"></div>
-    <div class="slide"><img src="images/becksondergaard/BS_IMG_6035.jpeg" alt="Becksondergaard 1"></div>
-    <div class="slide"><img src="images/becksondergaard/BS_IMG_6210.jpeg" alt="Becksondergaard 2"></div>
-    <div class="slide"><img src="images/becksondergaard/BS_IMG_6399.jpeg" alt="Becksondergaard 3"></div>
-    <div class="slide"><img src="images/becksondergaard/BS_IMG_7599.jpeg" alt="Becksondergaard 4"></div>
-    <div class="slide"><img src="images/becksondergaard/BS_IMG_7869.jpeg" alt="Becksondergaard 5"></div>
-    <div class="slide"><img src="images/rfshop2022/OZ0A1456.jpg" alt="RF Shop 1"></div>
-    <div class="slide"><img src="images/rfshop2022/OZ0A1604.jpg" alt="RF Shop 2"></div>
-    <div class="slide"><img src="images/rfshop2022/OZ0A1749.jpg" alt="RF Shop 3"></div>
-    <div class="slide"><img src="images/rfshop2022/OZ0A1797.jpg" alt="RF Shop 4"></div>
-    <div class="slide"><img src="images/rfshop2022/OZ0A1911.jpg" alt="RF Shop 5"></div>
+  <header>
+    <a href="/" class="logo">Anna Jarlbo</a>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <nav id="nav">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="mailto:hello@annajarlbo.com">Contact</a>
+    </nav>
+    <div class="social-links">
+      <a href="https://instagram.com" target="_blank" aria-label="Instagram">◉</a>
+      <a href="https://linkedin.com" target="_blank" aria-label="LinkedIn">▣</a>
+    </div>
+  </header>
+
+  <main class="gallery" id="work">
+    <!-- Roskilde 2024 -->
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2024/20240612_Roskilde2007 1.jpg" alt="Roskilde 2024" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2024/20240612_Roskilde4250 2.jpg" alt="Roskilde 2024" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2024/20240612_Roskilde4392 1.jpg" alt="Roskilde 2024" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2024/20240612_Roskilde4596 1.jpg" alt="Roskilde 2024" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2024/20240612_Roskilde4849 1.jpg" alt="Roskilde 2024" loading="lazy">
+    </div>
+
+    <!-- Roskilde 2022 -->
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box4.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box5.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box6.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box7.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box8.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box9.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box10.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box11.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box12.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/rf-box13.webp" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/billede1.jpg" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/billede2.jpg" alt="Roskilde 2022" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2022/billede3.jpg" alt="Roskilde 2022" loading="lazy">
+    </div>
+
+    <!-- Roskilde 2019 -->
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-1-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-2-759x1162.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-3-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-4-759x1162.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-5-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-6-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-7-759x397.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-8-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2019/roskilde-merch2019-9-759x1139.jpg" alt="Roskilde 2019" loading="lazy">
+    </div>
+
+    <!-- Roskilde 2018 -->
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/A.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/C-759x1265.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/D-759x1265.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/I-759x397.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/J-759x1265.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/K-759x1265.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/O-759x1139.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/P-759x1139.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2018/P-759x1265.jpg" alt="Roskilde 2018" loading="lazy">
+    </div>
+
+    <!-- Roskilde 2016 -->
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A1456.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A1604.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A1749.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A1797.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A1911.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A2049.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A2066-759x397.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A2165.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A2257.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/roskilde2016/OZ0A2452.jpg" alt="Roskilde 2016" loading="lazy">
+    </div>
+
+    <!-- Becksondergaard -->
+    <div class="gallery-item">
+      <img src="assets/images/becksondergaard/BS_IMG_6035.jpeg" alt="Becksondergaard" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/becksondergaard/BS_IMG_6210.jpeg" alt="Becksondergaard" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/becksondergaard/BS_IMG_6399.jpeg" alt="Becksondergaard" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/becksondergaard/BS_IMG_7599.jpeg" alt="Becksondergaard" loading="lazy">
+    </div>
+    <div class="gallery-item">
+      <img src="assets/images/becksondergaard/BS_IMG_7869.jpeg" alt="Becksondergaard" loading="lazy">
+    </div>
+
+    <!-- Profile -->
+    <div class="gallery-item">
+      <img src="assets/images/profile_flowers.jpg" alt="Profile" loading="lazy">
+    </div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox">
+    <span class="lightbox-close" onclick="closeLightbox()">×</span>
+    <span class="lightbox-nav lightbox-prev" onclick="navigateLightbox(-1)">‹</span>
+    <img src="" alt="Lightbox Image" id="lightbox-img">
+    <span class="lightbox-nav lightbox-next" onclick="navigateLightbox(1)">›</span>
   </div>
+
+  <footer>
+    <p>© 2024 Anna Jarlbo. All rights reserved.</p>
+  </footer>
+
+  <script>
+    // Mobile menu toggle
+    function toggleMenu() {
+      document.getElementById('nav').classList.toggle('active');
+    }
+
+    // Lightbox functionality
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    let currentIndex = 0;
+
+    galleryItems.forEach((img, index) => {
+      img.addEventListener('click', () => {
+        currentIndex = index;
+        lightboxImg.src = img.src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+
+    function navigateLightbox(direction) {
+      currentIndex += direction;
+      if (currentIndex < 0) currentIndex = galleryItems.length - 1;
+      if (currentIndex >= galleryItems.length) currentIndex = 0;
+      lightboxImg.src = galleryItems[currentIndex].src;
+    }
+
+    // Close lightbox on background click
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox) {
+        closeLightbox();
+      }
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('active')) return;
+      if (e.key === 'Escape') closeLightbox();
+      if (e.key === 'ArrowLeft') navigateLightbox(-1);
+      if (e.key === 'ArrowRight') navigateLightbox(1);
+    });
+
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          // Close mobile menu if open
+          document.getElementById('nav').classList.remove('active');
+        }
+      });
+    });
+  </script>
 </body>
 
 </html>

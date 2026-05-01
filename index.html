@@ -365,6 +365,53 @@
     .gallery-item:nth-child(n+11) {
       animation-delay: 0.6s;
     }
+
+    /* Gallery Sections */
+    .gallery-section {
+      padding: 40px 20px;
+      max-width: 1800px;
+      margin: 0 auto;
+    }
+
+    .gallery-section:first-of-type {
+      padding-top: 120px;
+    }
+
+    .section-title {
+      font-family: 'Kaoly', 'Georgia', serif;
+      font-size: 2rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #fff;
+      margin-bottom: 30px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid #333;
+    }
+
+    .section-gallery {
+      columns: 4 300px;
+      column-gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .gallery-section:first-of-type {
+        padding-top: 100px;
+      }
+
+      .section-title {
+        font-size: 1.3rem;
+        margin-bottom: 20px;
+      }
+
+      .section-gallery {
+        columns: 2 150px;
+        column-gap: 10px;
+      }
+
+      .gallery-section {
+        padding: 30px 10px;
+      }
+    }
   </style>
 </head>
 
